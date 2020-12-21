@@ -20,13 +20,16 @@ def index():
 5
 @app.route('/novo')
 def novo():
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        flash('Você precisa estar logado para fazer isso!')
+        return redirect('/login')
     return render_template('novo.html', titulo='Novo Jogo')
 
 @app.route('/login')
 def login():
     return render_template('login.html', titulo='Login')
 
-@app.route(/logout)
+@app.route('/logout')
 def logout():
     session['usuario_logado'] = None
     flash('Nenhum usuario logado')
@@ -41,7 +44,7 @@ def criar():
     lista.append(jogo)
     return redirect('/')
 
-@app.route('/autenticar', methods=['post',])
+@app.route('/autenticar', methods=['POST',])
 def autenticar():
     if 'mestra' == request.form['senha']:
         session['usuario_logado'] = request.form['usuario']
