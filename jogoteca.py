@@ -26,6 +26,12 @@ def novo():
 def login():
     return render_template('login.html', titulo='Login')
 
+@app.route(/logout)
+def logout():
+    session['usuario_logado'] = None
+    flash('Nenhum usuario logado')
+    return redirect('/')
+
 @app.route('/criar', methods=['POST',])
 def criar():
     nome = request.form['nome']
