@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 
 app = Flask(__name__)
+app.secret_key = 'aloalocriancada'
 
 class Jogo:
     def __init__(self, nome, categoria, console):
@@ -16,7 +17,7 @@ lista = [jogo1, jogo2, jogo3]
 @app.route('/')
 def index():
     return render_template('lista.html', titulo='Jogos', jogos=lista)
-
+5
 @app.route('/novo')
 def novo():
     return render_template('novo.html', titulo='Novo Jogo')
@@ -37,8 +38,11 @@ def criar():
 @app.route('/autenticar', methods=['post',])
 def autenticar():
     if 'mestra' == request.form['senha']:
+        session['usuario_logado'] = request.form['usuario']
+        flash(session['usuario_logado'] + ' logou com sucesso')
         return redirect('/')
     else:
+        flash('Nome de usuario ou senha invalidos')
         return redirect('/login')
 
 app.run(host='0.0.0.0', port='8080', debug=True)
