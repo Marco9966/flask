@@ -9,6 +9,19 @@ class Jogo:
         self.categoria = categoria
         self.console = console
 
+class Usuario:
+    def __init__(self, id, nome, senha):
+        self.id = id
+        self.nome = nome
+        self.senha = senha
+
+usuario1 = Usuario('luan', 'Luan Marques', '1234')
+usuario2 = Usuario('marco', 'Marco Antônio', 'vcvc00')
+usuario3 = Usuario('flavio', 'Flávio', 'javascript')
+usuarios = {usuario1.id:usuario1,
+            usuario2.id:usuario2,
+            usuario3.id:usuario3}
+
 jogo1 = Jogo('Super Mario', 'Ação', 'SNES')
 jogo2 = Jogo('Pokemon Gold', 'RPG', 'GBA')
 jogo3 = Jogo('Mortal Kombat', 'Luta', 'SNES')
@@ -47,13 +60,15 @@ def criar():
 
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
-    if 'mestra' == request.form['senha']:
-        session['usuario_logado'] = request.form['usuario']
-        flash(session['usuario_logado'] + ' logou com sucesso')
-        proxima_pagina = request.form['proxima']
-        return redirect(proxima_pagina)
-    else:
-        flash('Nome de usuario ou senha invalidos')
-        return redirect(url_for('login'))
+    usuario = request.form['usuario']
+    if usuario in usuarios:
+        usuario = usuarios[usuario]
+        if request.form['senha'] == usuario.senha:
+            session['usuario_logado'] = usuario.id
+            flash(usuario.nome + ' logou com sucesso')
+            proxima_pagina = request.form['proxima']
+            return redirect(proxima_pagina)
+    flash('Nome de usuario ou senha invalidos')
+    return redirect(url_for('login'))
 
 app.run(host='0.0.0.0', port='8080', debug=True)
